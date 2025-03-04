@@ -1,0 +1,13 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	color: white;
+	background-color: black;
+	--font-main: 'Fjalla One', sans-serif;
+	--font-body: 'Space Mono', monospace;
+}
