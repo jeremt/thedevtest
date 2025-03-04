@@ -33,6 +33,13 @@ export const questions = [
 				hipster: 0.5,
 				inge: 0.2
 			},
+			{
+				text: "Cursor, mais je reste à l'affût des nouveautés",
+				hacker: 0.2,
+				ancien: 0.4,
+				hipster: 0.8,
+				inge: 0.6
+			},
 			{ text: 'Eclipse évidemment !', hacker: 0.2, ancien: 1, hipster: 0.2, inge: 0.5 },
 			{ text: 'PyCharm', hacker: 0.2, ancien: 0.2, hipster: 0.6, inge: 0.8 }
 		]
@@ -40,13 +47,6 @@ export const questions = [
 	{
 		text: 'Quand un nouveau framework sort, vous...',
 		choices: [
-			{
-				text: "L'analysez en profondeur pour ses failles de sécurité",
-				hacker: 1,
-				ancien: 0.2,
-				hipster: 0.5,
-				inge: 0.3
-			},
 			{
 				text: 'Foncez et créez un projet immédiatement',
 				hacker: 0.3,
@@ -62,9 +62,16 @@ export const questions = [
 				inge: 0.5
 			},
 			{
-				text: 'Évaluez son potentiel mathématique',
+				text: "L'analysez en profondeur pour ses failles de sécurité",
+				hacker: 1,
+				ancien: 0.2,
+				hipster: 0.5,
+				inge: 0.3
+			},
+			{
+				text: 'Êtes indifférent⋅e',
 				hacker: 0.2,
-				ancien: 0.3,
+				ancien: 0.8,
 				hipster: 0.4,
 				inge: 1
 			}
@@ -74,55 +81,21 @@ export const questions = [
 		text: "Votre système d'exploitation préféré...",
 		choices: [
 			{
-				text: 'Arch Linux (compilé manuellement)',
+				text: 'La dernière version de MacOS, sans hésitation !',
+				hacker: 0.3,
+				ancien: 0.2,
+				hipster: 1,
+				inge: 0.4
+			},
+			{
+				text: 'Arch Linux, btw (compilé manuellement)',
 				hacker: 1,
-				ancien: 0.5,
+				ancien: 0.8,
 				hipster: 0.6,
 				inge: 0.2
 			},
 			{
-				text: 'MacOS avec tous les derniers gadgets',
-				hacker: 0.3,
-				ancien: 0.2,
-				hipster: 1,
-				inge: 0.4
-			},
-			{
-				text: 'Un système que vous utilisez depuis des décennies',
-				hacker: 0.2,
-				ancien: 1,
-				hipster: 0.1,
-				inge: 0.3
-			},
-			{ text: 'Un système de calcul scientifique', hacker: 0.2, ancien: 0.3, hipster: 0.4, inge: 1 }
-		]
-	},
-	{
-		text: 'Face à un bug complexe, votre première réaction...',
-		choices: [
-			{
-				text: 'Chercher une potentielle exploitation',
-				hacker: 1,
-				ancien: 0.3,
-				hipster: 0.4,
-				inge: 0.2
-			},
-			{
-				text: 'Googler la dernière solution tendance',
-				hacker: 0.2,
-				ancien: 0.2,
-				hipster: 1,
-				inge: 0.3
-			},
-			{
-				text: "Le résoudre comme à l'époque des cartes perforées",
-				hacker: 0.3,
-				ancien: 1,
-				hipster: 0.2,
-				inge: 0.4
-			},
-			{
-				text: 'Modéliser mathématiquement le problème',
+				text: 'Une feuille et un crayon, il y a que ça de vrai ;)',
 				hacker: 0.2,
 				ancien: 0.3,
 				hipster: 0.4,
@@ -131,21 +104,47 @@ export const questions = [
 		]
 	},
 	{
-		text: 'Votre style de documentation préféré...',
+		text: 'Face à un bug complexe, votre première réaction...',
 		choices: [
 			{
-				text: 'Des notes cryptiques dans le code',
-				hacker: 1,
-				ancien: 0.6,
-				hipster: 0.3,
-				inge: 0.2
+				text: 'Modéliser mathématiquement le problème',
+				hacker: 0.2,
+				ancien: 0.3,
+				hipster: 0.4,
+				inge: 1
 			},
 			{
-				text: 'Une documentation Notion ultra stylée',
+				text: 'Le résoudre comme au bon vieux temps, au débuggeur et jus de cerveau !',
+				hacker: 0.3,
+				ancien: 1,
+				hipster: 0.2,
+				inge: 0.4
+			},
+			{
+				text: 'ChatGPT, Claude, Deepseek, etc. On demande son avis au LLM du moment 😁',
 				hacker: 0.2,
 				ancien: 0.2,
 				hipster: 1,
 				inge: 0.3
+			},
+			{
+				text: 'Chercher une potentielle exploitation 🤫',
+				hacker: 1,
+				ancien: 0.3,
+				hipster: 0.4,
+				inge: 0.2
+			}
+		]
+	},
+	{
+		text: 'Votre style de documentation préféré...',
+		choices: [
+			{
+				text: 'Docu quoi ?',
+				hacker: 0.7,
+				ancien: 0.2,
+				hipster: 0.7,
+				inge: 0.2
 			},
 			{
 				text: "Des commentaires détaillés à l'ancienne",
@@ -154,18 +153,31 @@ export const questions = [
 				hipster: 0.2,
 				inge: 0.5
 			},
-			{ text: 'Des documents LaTeX mathématiques', hacker: 0.2, ancien: 0.3, hipster: 0.4, inge: 1 }
+			{
+				text: 'Des documents LaTeX mathématiques',
+				hacker: 0.2,
+				ancien: 0.3,
+				hipster: 0.4,
+				inge: 1
+			},
+			{
+				text: 'Une documentation Notion ultra stylée',
+				hacker: 0.2,
+				ancien: 0.2,
+				hipster: 1,
+				inge: 0.3
+			}
 		]
 	},
 	{
 		text: "Un alien débarque et vous demande d'expliquer votre métier. Vous répondez...",
 		choices: [
 			{
-				text: 'Une démo en direct de hacking live sur son vaisseau',
-				hacker: 1,
-				ancien: 0.3,
-				hipster: 0.5,
-				inge: 0.2
+				text: "Un long récit commençant par 'À mon époque...'",
+				hacker: 0.2,
+				ancien: 1,
+				hipster: 0.2,
+				inge: 0.3
 			},
 			{
 				text: 'Une présentation Keynote avec des animations futuristes',
@@ -175,18 +187,18 @@ export const questions = [
 				inge: 0.4
 			},
 			{
-				text: "Un long récit commençant par 'À mon époque...'",
-				hacker: 0.2,
-				ancien: 1,
-				hipster: 0.2,
-				inge: 0.3
-			},
-			{
 				text: 'Un modèle mathématique de communication interstellaire',
 				hacker: 0.3,
 				ancien: 0.2,
 				hipster: 0.4,
 				inge: 1
+			},
+			{
+				text: 'Une démo en direct de hacking live sur son vaisseau',
+				hacker: 1,
+				ancien: 0.3,
+				hipster: 0.5,
+				inge: 0.2
 			}
 		]
 	},
@@ -194,11 +206,11 @@ export const questions = [
 		text: 'Votre side project ultime serait...',
 		choices: [
 			{
-				text: 'Un framework de cybersécurité open-source',
-				hacker: 1,
-				ancien: 0.4,
-				hipster: 0.6,
-				inge: 0.3
+				text: 'Une IA qui résout des problèmes mathématiques complexes',
+				hacker: 0.2,
+				ancien: 0.3,
+				hipster: 0.4,
+				inge: 1
 			},
 			{
 				text: 'Une app qui prédit les prochaines tendances tech',
@@ -208,31 +220,25 @@ export const questions = [
 				inge: 0.5
 			},
 			{
+				text: 'Un framework de cybersécurité open-source',
+				hacker: 1,
+				ancien: 0.4,
+				hipster: 0.6,
+				inge: 0.3
+			},
+
+			{
 				text: 'Un système de gestion de projet rétro-compatible',
 				hacker: 0.2,
 				ancien: 1,
 				hipster: 0.3,
 				inge: 0.4
-			},
-			{
-				text: 'Une IA qui résout des problèmes mathématiques complexes',
-				hacker: 0.2,
-				ancien: 0.3,
-				hipster: 0.4,
-				inge: 1
 			}
 		]
 	},
 	{
 		text: 'La musique que vous codez ressemblerait à...',
 		choices: [
-			{
-				text: 'Un mix de sons de machine et de sirènes de sécurité',
-				hacker: 1,
-				ancien: 0.3,
-				hipster: 0.6,
-				inge: 0.2
-			},
 			{
 				text: 'Un podcast tech avec des jingles électroniques',
 				hacker: 0.2,
@@ -260,20 +266,6 @@ export const questions = [
 		text: 'On vous propose de rejoindre une équipe. Votre premier réflexe...',
 		choices: [
 			{
-				text: 'Analyser les vulnérabilités de leur infrastructure',
-				hacker: 1,
-				ancien: 0.4,
-				hipster: 0.5,
-				inge: 0.3
-			},
-			{
-				text: 'Vérifier si le stack technique est suffisamment cool',
-				hacker: 0.2,
-				ancien: 0.2,
-				hipster: 1,
-				inge: 0.4
-			},
-			{
 				text: 'Comparer avec vos expériences passées',
 				hacker: 0.3,
 				ancien: 1,
@@ -281,24 +273,31 @@ export const questions = [
 				inge: 0.4
 			},
 			{
+				text: 'Analyser les vulnérabilités de leur infrastructure',
+				hacker: 1,
+				ancien: 0.4,
+				hipster: 0.5,
+				inge: 0.3
+			},
+			{
 				text: 'Évaluer la complexité algorithmique de leurs projets',
 				hacker: 0.2,
 				ancien: 0.3,
 				hipster: 0.4,
 				inge: 1
+			},
+			{
+				text: 'Vérifier si le stack technique est suffisamment cool',
+				hacker: 0.2,
+				ancien: 0.2,
+				hipster: 1,
+				inge: 0.4
 			}
 		]
 	},
 	{
 		text: 'Votre définition du bonheur ultime en tant que développeur...',
 		choices: [
-			{
-				text: 'Trouver et corriger une faille de sécu mondiale',
-				hacker: 1,
-				ancien: 0.3,
-				hipster: 0.5,
-				inge: 0.2
-			},
 			{
 				text: 'Être cité dans un article Tech Crunch',
 				hacker: 0.2,
@@ -307,11 +306,11 @@ export const questions = [
 				inge: 0.4
 			},
 			{
-				text: 'Un environnement de dev stable depuis 20 ans',
-				hacker: 0.3,
-				ancien: 1,
-				hipster: 0.2,
-				inge: 0.4
+				text: 'Trouver et corriger une faille de sécu mondiale',
+				hacker: 1,
+				ancien: 0.3,
+				hipster: 0.5,
+				inge: 0.2
 			},
 			{
 				text: 'Résoudre un problème mathématique séculaire',
@@ -319,6 +318,13 @@ export const questions = [
 				ancien: 0.4,
 				hipster: 0.3,
 				inge: 1
+			},
+			{
+				text: 'Un environnement de dev stable depuis 20 ans',
+				hacker: 0.3,
+				ancien: 1,
+				hipster: 0.2,
+				inge: 0.4
 			}
 		]
 	}
