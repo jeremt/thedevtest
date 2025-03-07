@@ -19,22 +19,25 @@
 <main>
 	{#if screen === 'questions' && currentQuestion}
 		<h1 class="small">{currentQuestion.text}</h1>
-		{#each currentQuestion.choices as choice}
-			<button
-				class="choice"
-				onclick={() => {
-					for (const key of Object.keys(scores) as (keyof typeof data.developers)[]) {
-						scores[key] += choice[key];
-					}
-					questionIndex += 1;
-					if (questionIndex === data.questions.length) {
-						screen = 'end';
-					}
-				}}
-			>
-				{choice.text}
-			</button>
-		{/each}
+		{#key questionIndex}
+			{#each currentQuestion.choices as choice, i}
+				<button
+					class="choice"
+					style:--delay="{i * 0.1}s"
+					onclick={() => {
+						for (const key of Object.keys(scores) as (keyof typeof data.developers)[]) {
+							scores[key] += choice[key];
+						}
+						questionIndex += 1;
+						if (questionIndex === data.questions.length) {
+							screen = 'end';
+						}
+					}}
+				>
+					{choice.text}
+				</button>
+			{/each}
+		{/key}
 	{:else if screen === 'start'}
 		<h1>Quel type de dev es-tu ?</h1>
 		<p>
@@ -92,6 +95,7 @@
 			font-size: 2.2rem;
 		}
 	}
+
 	button {
 		color: white;
 		border: 0.2rem solid white;
@@ -99,10 +103,16 @@
 		padding: 0.4em 0.8em;
 		cursor: pointer;
 		transition: 0.3s all;
+		opacity: 0;
+		animation: appear 0.5s forwards;
+		animation-delay: var(--delay, 0);
 		&:hover {
-			color: black;
-			background-color: white;
-			box-shadow: 0 0 4rem #fff8;
+			translate: -0.3rem -0.3rem;
+			box-shadow: 0.3rem 0.3rem 0 white;
+		}
+		&:active {
+			translate: 0 0;
+			box-shadow: 0 0 0 white;
 		}
 		&.start {
 			font-size: clamp(1.4rem, 4.5vw, 2.5rem);
@@ -121,5 +131,15 @@
 		max-width: 100%;
 		border-radius: 50%;
 		margin-top: 2rem;
+	}
+	@keyframes appear {
+		from {
+			opacity: 0;
+			scale: 0.9;
+		}
+		to {
+			opacity: 1;
+			scale: 1;
+		}
 	}
 </style>

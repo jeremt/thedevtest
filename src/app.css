@@ -1,5 +1,9 @@
 * {
 	box-sizing: border-box;
+	--color-inge: #6cffdc;
+	--color-hipster: #ff9e5a;
+	--color-hacker: #ff4bfe;
+	--color-ancien: #f1f19d;
 }
 body {
 	margin: 0;
