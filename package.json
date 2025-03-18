@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "npm run test:unit -- --run",
+		"swagger": "pnpx openapi-typescript src/lib/swagger/swagger.yaml > src/lib/swagger/types.d.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -41,5 +42,8 @@
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
+	},
+	"dependencies": {
+		"openapi-fetch": "^0.13.4"
 	}
 }

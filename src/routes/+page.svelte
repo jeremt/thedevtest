@@ -20,7 +20,7 @@
 	{#if screen === 'questions' && currentQuestion}
 		<h1 class="small">{currentQuestion.text}</h1>
 		{#key questionIndex}
-			{#each currentQuestion.choices as choice, i}
+			{#each currentQuestion.choices as choice, i (choice.text)}
 				<button
 					class="choice"
 					style:--delay="{i * 0.1}s"
