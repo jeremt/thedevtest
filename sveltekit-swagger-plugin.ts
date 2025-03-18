@@ -1,7 +1,9 @@
 import ts from 'typescript';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import AwaitLock from 'await-lock';
 import openapiTS, { astToString, type OpenAPI3 } from 'openapi-typescript';
+
 import {
 	Node,
 	Type,
@@ -206,13 +208,15 @@ const parseReturnStatement = (returnStatement: ReturnStatement) => {
 };
 
 const parseEndpointHandler = (project: Project, filePath: string) => {
-	const path = filePath
-		.replace(/^src\/routes/, '')
-		.replace(/\+server\.ts$/, '')
-		.replace(/\[([^\]]+)\]/g, '{$1}');
+	const path = getEndpointHandlerPath(filePath);
 	const endpoints: Endpoint[] = [];
-	const sourceFile = project.getSourceFile(filePath)!;
+	const sourceFile = project.getSourceFile(filePath);
 	const parameters = path.match(/{([^}]+)}/g)?.map((p) => p.slice(1, -1)) ?? [];
+
+	if (!sourceFile) {
+		console.error(`Could not find source file for ${filePath}`);
+		return [];
+	}
 
 	for (const methodName of ['GET', 'PUT', 'POST', 'PATCH', 'DELETE']) {
 		const functionExpression =
@@ -287,66 +291,100 @@ const parseEndpointHandler = (project: Project, filePath: string) => {
 	return endpoints;
 };
 
+const isEndpointHandlerPath = (filePath: string) => {
+	return filePath.includes('src/routes/api/') && filePath.endsWith('+server.ts');
+};
+
+const getEndpointHandlerPath = (filePath: string) => {
+	return path
+		.relative(import.meta.dirname, filePath)
+		.replace(/^src\/routes/, '')
+		.replace(/\+server\.ts$/, '')
+		.replace(/\[([^\]]+)\]/g, '{$1}');
+};
+
 export const sveltekitSwagger = (pluginOptions: PluginOptions): Plugin => {
+	const lock = new AwaitLock();
 	const options = {
 		output: {
-			types: path.join('src', 'lib', 'swagger', 'types.d.ts'),
-			swagger: path.join('src', 'lib', 'swagger', 'swagger.json')
+			types: path.join(import.meta.dirname, 'src', 'lib', 'swagger', 'types.d.ts'),
+			swagger: path.join(import.meta.dirname, 'src', 'lib', 'swagger', 'swagger.json')
 		},
 		...pluginOptions
 	} satisfies MergedOptions;
 	const project = createProject(options);
-	const endpoints: Endpoint[] = [];
 
-	const updateSwagger = async () => {
+	let endpoints: Endpoint[] = [];
+
+	const writeSwagger = async () => {
 		const swagger = createSwagger(options, endpoints);
 		const swaggerTypes = await openapiTS(swagger as unknown as OpenAPI3);
 
-		await fs.writeFile(options.output.types, astToString(swaggerTypes), {
-			encoding: 'utf8'
-		});
-		await fs.writeFile(options.output.swagger, JSON.stringify(swagger, null, 2), {
-			encoding: 'utf8'
-		});
+		try {
+			await lock.acquireAsync();
+			await Promise.all([
+				fs.writeFile(options.output.types, astToString(swaggerTypes), {
+					encoding: 'utf8'
+				}),
+				fs.writeFile(options.output.swagger, JSON.stringify(swagger, null, 2), {
+					encoding: 'utf8'
+				})
+			]);
+		} finally {
+			lock.release();
+		}
 	};
 
 	return {
 		name: 'vite-plugin-sveltekit-openapi',
 		async buildStart() {
 			for (const sourceFile of project.getSourceFiles()) {
-				const file = sourceFile.getFilePath();
+				const filePath = sourceFile.getFilePath();
 
-				if (file.includes('src/routes/api/') && file.endsWith('+server.ts')) {
-					endpoints.push(...parseEndpointHandler(project, path.relative(process.cwd(), file)));
+				if (isEndpointHandlerPath(filePath)) {
+					endpoints.push(...parseEndpointHandler(project, filePath));
 				}
 			}
 
-			await updateSwagger();
+			await writeSwagger();
 		},
-		async handleHotUpdate({ file }) {
-			if (
-				(await project.getSourceFile(file)?.refreshFromFileSystem()) !==
-				FileSystemRefreshResult.Deleted
-			) {
-				if (file.includes('src/routes/api/') && file.endsWith('+server.ts')) {
-					const updatedEndpoints = parseEndpointHandler(
-						project,
-						path.relative(process.cwd(), file)
-					);
+		async watchChange(id, change) {
+			switch (change.event) {
+				case 'create': {
+					project.addSourceFileAtPath(id);
 
-					for (const endpoint of updatedEndpoints) {
-						const existingEndpointIndex = endpoints.findIndex(
-							(e) => e.path === endpoint.path && e.method === endpoint.method
-						);
+					if (isEndpointHandlerPath(id)) {
+						const path = getEndpointHandlerPath(id);
+						endpoints = endpoints.filter((endpoint) => endpoint.path !== path);
+						endpoints.push(...parseEndpointHandler(project, id));
+						await writeSwagger();
+					}
+					break;
+				}
+				case 'update': {
+					const sourceFile = project.getSourceFile(id);
 
-						if (existingEndpointIndex !== -1) {
-							endpoints[existingEndpointIndex] = endpoint;
-						} else {
-							endpoints.push(endpoint);
+					if (sourceFile) {
+						const refreshStatus = await sourceFile.refreshFromFileSystem();
+
+						if (isEndpointHandlerPath(id) && refreshStatus === FileSystemRefreshResult.Updated) {
+							const path = getEndpointHandlerPath(id);
+							endpoints = endpoints.filter((endpoint) => endpoint.path !== path);
+							endpoints.push(...parseEndpointHandler(project, id));
+							await writeSwagger();
 						}
 					}
-
-					await updateSwagger();
+					break;
+				}
+				case 'delete': {
+					const sourceFile = project.getSourceFile(id);
+					if (sourceFile) project.removeSourceFile(sourceFile);
+					if (isEndpointHandlerPath(id)) {
+						const path = getEndpointHandlerPath(id);
+						endpoints = endpoints.filter((endpoint) => endpoint.path !== path);
+						await writeSwagger();
+					}
+					break;
 				}
 			}
 		}
