@@ -22,7 +22,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            message?: string;
+                            message: string;
                         };
                     };
                 };

@@ -87,6 +87,9 @@ const typeToJsonSchema = (type: Type, location: Node): OpenAPIV3.SchemaObject =>
 	if (type.getText().includes('ReadableStream')) {
 		return { type: 'string', format: 'binary' };
 	} else if (type.isString() || type.isStringLiteral()) {
+		if (type.isStringLiteral()) {
+			return { type: 'string', enum: [type.getText()] };
+		}
 		return { type: 'string' };
 	} else if (type.isNumber() || type.isNumberLiteral()) {
 		return { type: 'number' };
@@ -97,6 +100,15 @@ const typeToJsonSchema = (type: Type, location: Node): OpenAPIV3.SchemaObject =>
 	} else if (type.isObject()) {
 		return {
 			type: 'object',
+			required: type
+				.getProperties()
+				.filter((property) => {
+					if (property.hasFlags(ts.SymbolFlags.Optional)) {
+						return false;
+					}
+					return true;
+				})
+				.map((p) => p.getName()),
 			properties: type.getProperties().reduce(
 				(acc, property) => {
 					acc[property.getName()] = typeToJsonSchema(
