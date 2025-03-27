@@ -6,8 +6,9 @@ import type { paths } from './types';
 const contextKey = Symbol('swagger');
 export const getSwaggerContext = () =>
 	getContext<{ client: ReturnType<typeof createClient<paths>> }>(contextKey);
+
 export const setSwaggerContext = () => {
-	const client = $state(createClient<paths>({ baseUrl: `/api` }));
+	const client = $state(createClient<paths>({ baseUrl: `/` }));
 
 	return setContext(contextKey, {
 		get client() {
