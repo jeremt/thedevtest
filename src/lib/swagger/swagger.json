@@ -1,43 +1,18 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "TheDevTest API",
-    "version": "0.1.0",
-    "description": "API documentation for TheDevTest"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:5173"
-    },
-    {
-      "url": "https://thedevtest.vercel.app/"
-    }
-  ],
-  "paths": {
-    "/api/stats/": {
-      "get": {
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "description": "OK"
-          }
-        }
-      }
-    }
-  },
-  "components": {}
+	"openapi": "3.0.0",
+	"info": {
+		"title": "TheDevTest API",
+		"version": "0.1.0",
+		"description": "API documentation for TheDevTest"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:5173"
+		},
+		{
+			"url": "https://thedevtest.vercel.app/"
+		}
+	],
+	"paths": {},
+	"components": {}
 }
